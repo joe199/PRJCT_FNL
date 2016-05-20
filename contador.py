@@ -28,6 +28,7 @@ class FlowControl(object):
         self.total = 0
         self.nfc = NFCReader()
         self.server = server
+        self.client = client_sensor
         self.sortidor = 1
         self.cont = 0
         self.uid = None
@@ -52,7 +53,7 @@ class FlowControl(object):
             print "self.service =", self.service
             print "self.total =", self.total
         elif self.cont > 0:
-            client_sensor.enviar(self.uid, self.service, self.sortidor)
+            self.client.enviar(self.uid, self.service, self.sortidor)
         else:
             self.service = 0
             self.user = self._get_user()
