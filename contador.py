@@ -14,7 +14,7 @@ import RPi.GPIO as GPIO
 import time, sys
 import signal
 from NFCReader import NFCReader
-from server_sensor import server_sensor
+from client_sensor import client_sensor
 
 class FlowControl(object):
     """Controling FlowControl"""
@@ -28,7 +28,6 @@ class FlowControl(object):
         self.total = 0
         self.nfc = NFCReader()
         self.server = server
-        self.client = client_sensor()
         self.sortidor = 1
         self.cont = 0
         self.uid = None
@@ -52,8 +51,8 @@ class FlowControl(object):
             print "service =", self.litres
             print "self.service =", self.service
             print "self.total =", self.total
-        else if self.cont > 0:
-            self.server.enviar(self.uid, self.service, self.sortidor)
+        elif self.cont > 0:
+            client_sensor.enviar(self.uid, self.service, self.sortidor)
         else:
             self.service = 0
             self.user = self._get_user()
