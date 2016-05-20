@@ -2,7 +2,7 @@ import zmq
 from datetime import datetime, date
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy_declarative import User, Base
+from sqlalchemy_declarative import User, Base, Keg
 
 
 # ZeroMQ Context
@@ -22,7 +22,7 @@ def db_session():
     session = DBSession()
     return session
 
-def sava_data(self, message):
+def sava_data(message):
     #Aqui guardarem el messsage rebut(que constara del NFC's id i la quantitat de birra)
     try:
         #desglosem en variables
@@ -35,14 +35,14 @@ def sava_data(self, message):
         session = db_session()
         #primer de tot, buscar a la taula la quantitat de birra que ha vegut un id,
         #actualitzar aquest valor sumant lo que hi havia i lo nou
-        user = session.query(User).filter_by(userid = userid).all()
+        user = session.query(User).filter_by(userid = userid).one()
         #
         amount_total = user.amount + amount
         user.amount = amount_total
         session.commit()
 
         #guardem a la taula keg, la nova etrada
-        keg1 = session.query(Keg).filter_by(kegid = kegid).all()
+        keg1 = session.query(Keg).filter_by(kegid = kegid).one()
         amount_total1 = keg1.amount + amount
         keg1.amount = amount_total1
         session.commit()
