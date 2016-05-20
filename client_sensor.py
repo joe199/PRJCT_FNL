@@ -1,7 +1,7 @@
 import zmq
 import sys
 
-class client_sensor():
+class client_sensor(object):
 
 
     def enviar(uid, quantitybeer, sortidor):
@@ -16,3 +16,4 @@ class client_sensor():
         parametres = str(uid) + str(quantitybeer) + str(sortidor)
         sock.send(parametres)
         print sock.recv()
+        return True
