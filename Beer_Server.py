@@ -6,7 +6,7 @@ Server = Flask(__name__)
 #DB Session
 
 def db_session():
-    path_to_db = "mydatabase.db"
+    path_to_db = "beer_coholic.db"
     engine = create_engine('sqlite:///' + path_to_db)
     Base.metadata.create_all(engine)
     DBSession = sessionmaker(bind = engine)
@@ -57,14 +57,11 @@ def create_user():
             'email': request.json['email'],
             'amounut': request.json['amount'],
         }
-        print(User)
         session.add(user)
         session.commit()
-        #user = ""
     except:
         abort(404)
     return jsonify(id=user.id,userid=user.userid,username=user.username,realname=user.realname,email=user.email)
-    #return jsonify({'post': post}), 201
 
 @app.route('/users/<int:user_id>', methods=['PUT'])
 def update_user(user_id):
@@ -93,6 +90,70 @@ def delete_user(user_id):
     try:
         user = session.query(User).filter_by(id=user_id).one()
         session.delete(user)
+        session.commit()
+    except:
+        abort(404)
+    return jsonify({'result': True})
+
+
+#Keg CRUD
+
+@app.route('/kegs', methods=['GET'])
+def get_kegs():
+    session = db_session()
+    kegs = session.query(Keg).all()
+    return jsonify({'kegs': kegs})
+
+
+@app.route('/kegs/<int:keg_id>', methods=['GET'])
+def get_keg(keg_id):
+    session = db_session()
+    try:
+        keg = session.query(Keg).filter_by(id=keg_id).one()
+    except:
+        abort(404)
+    return jsonify(id=keg.id,amount=keg.amount,kegid=keg.kegid)
+
+@app.route('/kegs', methods=['POST'])
+def create_keg():
+    if not request.json or not 'amount' in request.json or not 'kegid' in request.json:
+        abort(400)
+    session = db_session()
+    try:
+        keg = {
+            'id': users[-1]['id'] + 1,
+            'amount': request.json['amount'],
+            'kegid': request.json['kegid'],
+        }
+        session.add(keg)
+        session.commit()
+    except:
+        abort(404)
+    return jsonify(id=keg.id,amount=keg.amount,kegid=keg.kegid)
+
+@app.route('/kegs/<int:keg_id>', methods=['PUT'])
+def update_keg(keg_id):
+    session = db_session()
+    try:
+        if not request.json:
+            abort(400)
+        keg = session.query(Keg).filter_by(id=ukeg_id).one()
+        if 'amount' in request.json:
+            keg.amount = request.json['amount']
+        if 'kegid' in request.json:
+            keg.kegid = request.json['kegid']
+    except:
+        session.commit()
+        abort(404)
+    session.commit()
+    return jsonify(id=keg.id,amount=keg.amount,kegid=keg.kegid)
+
+@app.route('/kegs/<int:keg_id>', methods=['DELETE'])
+def delete_keg(keg_id):
+    session = db_session()
+    try:
+        keg = session.query(Keg).filter_by(id=keg_id).one()
+        session.delete(keg)
         session.commit()
     except:
         abort(404)
