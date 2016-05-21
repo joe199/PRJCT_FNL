@@ -4,7 +4,7 @@ from sqlalchemy_declarative import User, Keg, Base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-Server = Flask(__name__)
+app = Flask(__name__)
 
 #DB Session
 
@@ -34,8 +34,8 @@ def bad_request(error):
 def get_users():
     session = db_session()
     users = session.query(User).all()
+    print (users)
     return jsonify({'users': users})
-
 
 @app.route('/users/<int:user_id>', methods=['GET'])
 def get_user(user_id):
@@ -58,12 +58,12 @@ def create_user():
             'username': request.json['username'],
             'realname': request.json['realname'],
             'email': request.json['email'],
-            'amounut': request.json['amount'],
         }
         session.add(user)
-        session.commit()
     except:
+        session.commit()
         abort(404)
+    session.commit()
     return jsonify(id=user.id,userid=user.userid,username=user.username,realname=user.realname,email=user.email)
 
 @app.route('/users/<int:user_id>', methods=['PUT'])
@@ -164,5 +164,5 @@ def delete_keg(keg_id):
 
 
 if __name__ == '__main__':
-    Server.debug = True
-    Server.run("0.0.0.0")
+    app.debug = True
+    app.run("0.0.0.0")
