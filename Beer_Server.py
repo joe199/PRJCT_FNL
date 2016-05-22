@@ -140,7 +140,7 @@ def update_keg(keg_id):
     try:
         if not request.json:
             abort(400)
-        keg = session.query(Keg).filter_by(id=ukeg_id).one()
+        keg = session.query(Keg).filter_by(id=keg_id).one()
         if 'amount' in request.json:
             keg.amount = request.json['amount']
         if 'kegid' in request.json:
