@@ -10,7 +10,7 @@ class User(Base):
      userid = Column(Integer)
      realname = Column(String)
      email = Column(String)
-     amount = Column(String)
+     amount = Column(Integer)
 
      def __repr__(self):
         return "<User(username='%s', userid='%s', realname='%s', email='%s', amount='%s')>" % (
