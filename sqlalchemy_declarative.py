@@ -4,27 +4,44 @@ from sqlalchemy import Column, Integer, String
 Base = declarative_base()
 
 class User(Base):
-     __tablename__ = 'users'
-     id = Column(Integer, primary_key=True)
-     username = Column(String)
-     userid = Column(Integer)
-     realname = Column(String)
-     email = Column(String)
-     amount = Column(String)
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True)
+    username = Column(String)
+    userid = Column(Integer)
+    realname = Column(String)
+    email = Column(String)
+    amount = Column(Real)
 
-     def __repr__(self):
+    def __repr__(self):
         return "<User(username='%s', userid='%s', realname='%s', email='%s', amount='%s')>" % (
                              self.username, self.userid, self.realname, self.email, self.amount)
 
-class Keg(Base):
-     __tablename__ = 'keg'
-     id = Column(Integer, primary_key=True)
-     amount = Column(Integer)
-     kegid = Column(Integer)
+    def __json__(self):
+        userjs = {}
+        userjs["id"] = self.id
+        userjs["userid"] = self.userid
+        userjs["username"] = self.username
+        userjs["realname"] = self.realname
+        userjs["email"] = self.email
+        return userjs
 
-     def __repr__(self):
+class Keg(Base):
+    __tablename__ = 'keg'
+    id = Column(Integer, primary_key=True)
+    amount = Column(Real)
+    kegid = Column(Integer)
+
+    def __repr__(self):
         return "<User(amount='%s', kegid='%s')>" % (
                              self.amount, self.kegid)
+
+    def __json__(self):
+        kegjs = {}
+        kegjs["id"] = self.id
+        kegjs["amount"] = self.amount
+        kegjs["kegid"] = self.kegid
+        return kegjs
+
 
 # Create all tables in the engine. This is equivalent to "Create Table"
 # statements in raw SQL.

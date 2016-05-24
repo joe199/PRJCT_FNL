@@ -22,7 +22,7 @@ def db_session():
     session = DBSession()
     return session
 
-def save_data(message):
+def sava_data(message):
     #Aqui guardarem el messsage rebut(que constara del NFC's id i la quantitat de birra)
     try:
         #desglosem en variables
@@ -67,7 +67,7 @@ def save_data(message):
 while True:
     message = sock.recv()
     if message is not None:
-        save = save_data(message)
+        save = self.save_data(message)
     if save is True:
         sock.send("Ha estat guardat correctament")
     else:
