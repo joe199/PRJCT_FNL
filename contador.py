@@ -35,12 +35,11 @@ class FlowControl(object):
         self.uid = None
         self.client=client_sensor.client_sensor()
 
-
     def _get_user(self):
 
         if self.nfc.is_card_present():
             self.uid = self.nfc.read_uid()
-            self.uid_hexa = ''.join(format(x, '02x') for x in self.uid)
+            
         return True
 
 
@@ -57,7 +56,7 @@ class FlowControl(object):
             print "self.service =", self.service
             print "self.total =", self.total
         elif self.cont > 0:
-            self.client.enviar(self.uid_hexa, self.service, self.sortidor)
+            self.client.enviar(self.uid, self.service, self.sortidor)
         else:
             self.service = 0
             self.user = self._get_user()
