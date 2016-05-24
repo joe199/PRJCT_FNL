@@ -1,7 +1,7 @@
 import zmq
 import sys
 
-class client_sensor(object):
+class client_sensor():
 
 
     def enviar(uid, quantitybeer, sortidor):

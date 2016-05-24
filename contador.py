@@ -14,7 +14,9 @@ import RPi.GPIO as GPIO
 import time, sys
 import signal
 from NFCReader import NFCReader
-from client_sensor import client_sensor
+import client_sensor
+
+
 
 class FlowControl(object):
     """Controling FlowControl"""
@@ -28,15 +30,16 @@ class FlowControl(object):
         self.total = 0
         self.nfc = NFCReader()
         self.server = server
-        self.client = client_sensor
         self.sortidor = 1
         self.cont = 0
         self.uid = None
+        self.client=client_sensor.client_sensor()
 
     def _get_user(self):
 
         if self.nfc.is_card_present():
             self.uid = self.nfc.read_uid()
+            
         return True
 
 
