@@ -32,10 +32,21 @@ def save_data(message):
         keg = str(message1[2])
         print userid, " ", amount, " ", keg
         #load session
+        print "abans session"
         session = db_session()
+        print "despres session"
         #primer de tot, buscar a la taula la quantitat de birra que ha vegut un id,
         #actualitzar aquest valor sumant lo que hi havia i lo nou
-        user = session.query(User).filter_by(userid = userid).one()
+        user = session.query(User).filter_by(userid = userid)
+        print "User primer:", user
+	try:
+           user = user.one()
+           print "User segon:", user
+        except:
+           new_user = User(username='No_ident', userid=userid, realname='fantasma', email='no email', amount=amount)
+           session.add(new_user)
+           session.commit()
+           print 'new user saved ', new_user 
         #
         amount_total = user.amount + amount
         user.amount = amount_total
@@ -47,7 +58,8 @@ def save_data(message):
         keg1.amount = amount_total1
         session.commit()
         return True
-    except:
+    except Exception as e:
+        print e
         return False
 
 

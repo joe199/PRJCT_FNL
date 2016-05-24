@@ -37,10 +37,12 @@ class FlowControl(object):
 
 
     def _get_user(self):
-
-        if self.nfc.is_card_present():
+        a = self.nfc.is_card_present()
+        if a == True:
             self.uid = self.nfc.read_uid()
-            self.uid_hexa = ''.join(format(x, '02x') for x in self.uid)
+        else:
+            self.uid = 0
+        self.uid_hexa = ''.join(format(x, '02x') for x in self.uid)
         return True
 
 
@@ -58,7 +60,7 @@ class FlowControl(object):
             print "self.total =", self.total
         elif self.cont > 0:
             self.client.enviar(self.uid_hexa, self.service, self.sortidor)
-        else:
+        if delta >= 0.5:
             self.service = 0
             self.user = self._get_user()
             self.server.update_score("1", self.user, self.service)
