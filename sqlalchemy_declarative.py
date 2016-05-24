@@ -10,7 +10,7 @@ class User(Base):
     userid = Column(Integer)
     realname = Column(String)
     email = Column(String)
-    amount = Column(Integer)
+    amount = Column(Real)
 
     def __repr__(self):
         return "<User(username='%s', userid='%s', realname='%s', email='%s', amount='%s')>" % (
@@ -28,7 +28,7 @@ class User(Base):
 class Keg(Base):
     __tablename__ = 'keg'
     id = Column(Integer, primary_key=True)
-    amount = Column(Integer)
+    amount = Column(Real)
     kegid = Column(Integer)
 
     def __repr__(self):
