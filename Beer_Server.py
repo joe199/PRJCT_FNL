@@ -34,15 +34,7 @@ def bad_request(error):
 def get_users():
     session = db_session()
     users = session.query(User).all()
-    all_users=[]
-    for user in users:
-        user_dict={}
-        user_dict["id"]=user.id
-        user_dict["userid"]=user.userid,
-        user_dict["username"]=user.username,
-        user_dict["realname"]=user.realname,
-        user_dict["email"]=user.email
-        all_users.append(user_dict)
+    all_users=[ user.__json__() for user in users]
     return jsonify({'users': all_users})
 
 @app.route('/users/<int:user_id>', methods=['GET'])

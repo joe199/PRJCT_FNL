@@ -12,9 +12,19 @@ class User(Base):
      email = Column(String)
      amount = Column(Integer)
 
-     def __repr__(self):
+    def __repr__(self):
         return "<User(username='%s', userid='%s', realname='%s', email='%s', amount='%s')>" % (
                              self.username, self.userid, self.realname, self.email, self.amount)
+
+    def __json__(self):
+        userjs = {}
+        print "lbhdbfgibdibih"
+        userjs["id"] = self.id
+        userjs["userid"] = self.userid,
+        userjs["username"] = self.username,
+        userjs["realname"] = self.realname,
+        userjs["email"] = self.email
+        return userjs
 
 class Keg(Base):
      __tablename__ = 'keg'
