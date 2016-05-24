@@ -4,13 +4,13 @@ from sqlalchemy import Column, Integer, String
 Base = declarative_base()
 
 class User(Base):
-     __tablename__ = 'users'
-     id = Column(Integer, primary_key=True)
-     username = Column(String)
-     userid = Column(Integer)
-     realname = Column(String)
-     email = Column(String)
-     amount = Column(Integer)
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True)
+    username = Column(String)
+    userid = Column(Integer)
+    realname = Column(String)
+    email = Column(String)
+    amount = Column(Integer)
 
     def __repr__(self):
         return "<User(username='%s', userid='%s', realname='%s', email='%s', amount='%s')>" % (
