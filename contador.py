@@ -35,6 +35,7 @@ class FlowControl(object):
         self.uid = None
         self.client=client_sensor.client_sensor()
 
+
     def _get_user(self):
 
         if self.nfc.is_card_present():
