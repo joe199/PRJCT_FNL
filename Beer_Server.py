@@ -105,7 +105,8 @@ def delete_user(user_id):
 def get_kegs():
     session = db_session()
     kegs = session.query(Keg).all()
-    return jsonify({'kegs': kegs})
+    all_kegs=[ keg.__json__() for keg in kegs]
+    return jsonify({'kegs': all_kegs})
 
 
 @app.route('/kegs/<int:keg_id>', methods=['GET'])

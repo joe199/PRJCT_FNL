@@ -18,23 +18,30 @@ class User(Base):
 
     def __json__(self):
         userjs = {}
-        print "lbhdbfgibdibih"
         userjs["id"] = self.id
-        userjs["userid"] = self.userid,
-        userjs["username"] = self.username,
-        userjs["realname"] = self.realname,
+        userjs["userid"] = self.userid
+        userjs["username"] = self.username
+        userjs["realname"] = self.realname
         userjs["email"] = self.email
         return userjs
 
 class Keg(Base):
-     __tablename__ = 'keg'
-     id = Column(Integer, primary_key=True)
-     amount = Column(Integer)
-     kegid = Column(Integer)
+    __tablename__ = 'keg'
+    id = Column(Integer, primary_key=True)
+    amount = Column(Integer)
+    kegid = Column(Integer)
 
-     def __repr__(self):
+    def __repr__(self):
         return "<User(amount='%s', kegid='%s')>" % (
                              self.amount, self.kegid)
+
+    def __json__(self):
+        kegjs = {}
+        kegjs["id"] = self.id
+        kegjs["amount"] = self.amount
+        kegjs["kegid"] = self.kegid
+        return kegjs
+
 
 # Create all tables in the engine. This is equivalent to "Create Table"
 # statements in raw SQL.
