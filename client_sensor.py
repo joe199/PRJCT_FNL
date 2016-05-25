@@ -4,7 +4,7 @@ import sys
 class client_sensor():
 
 
-    def enviar(uid, quantitybeer, sortidor):
+    def enviar(self, uid, quantitybeer, sortidor):
 
         context = zmq.Context()
 
