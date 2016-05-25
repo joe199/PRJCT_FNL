@@ -67,7 +67,7 @@ def sava_data(message):
 while True:
     message = sock.recv()
     if message is not None:
-        save = self.save_data(message)
+        save = save_data(message)
     if save is True:
         sock.send("Ha estat guardat correctament")
     else:
