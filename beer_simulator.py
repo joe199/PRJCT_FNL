@@ -31,3 +31,23 @@ class BeerControl(object):
         finally:
             # GPIO.cleanup()
             pass
+
+class BeerServer(object):
+    """Server"""
+    def __init__(self):
+        super(BeerServer, self).__init__()
+        self.scores = {}
+
+    def update_score(self, kegnum, user, beer):
+        self.scores[user] = self.scores.get(user, 0.0) + float(beer)
+
+    def print_leaderboard(self):
+        print "*" * 40
+        for s in self.scores:
+            print s, " has drank ", self.scores[s], " L"
+        print "*" * 40
+
+    def run_loop(self):
+        while True:
+            r = receive()
+            self.update_score(r)

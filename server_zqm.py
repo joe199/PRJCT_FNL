@@ -28,8 +28,8 @@ def sava_data(message):
         #desglosem en variables
         message1 = message.split(" ")
         userid = message1[0]
-        amount = str(message1[1])
-        keg = str(message1[2])
+        amount = int(message1[1])
+        keg = int(message1[2])
         print userid, " ", amount, " ", keg
         #load session
         print "abans session"
@@ -46,7 +46,7 @@ def sava_data(message):
            new_user = User(username='No_ident', userid=userid, realname='fantasma', email='no email', amount=amount)
            session.add(new_user)
            session.commit()
-           print 'new user saved ', new_user 
+           print 'new user saved ', new_user
         #
         amount_total = user.amount + amount
         user.amount = amount_total
