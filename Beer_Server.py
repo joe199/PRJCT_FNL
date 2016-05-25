@@ -37,7 +37,7 @@ def get_users():
     all_users=[ user.__json__() for user in users]
     return jsonify({'users': all_users})
 
-@app.route('/users/<int:username>', methods=['GET'])
+@app.route('/users/<username>', methods=['GET'])
 def get_user(username):
     session = db_session()
     try:
@@ -66,7 +66,7 @@ def create_user():
     session.commit()
     return jsonify(id=user.id,userid=user.userid,username=user.username,realname=user.realname,email=user.email)
 
-@app.route('/users/<int:username>', methods=['PUT'])
+@app.route('/users/<username>', methods=['PUT'])
 def update_user(username):
     session = db_session()
     try:
@@ -87,7 +87,7 @@ def update_user(username):
     session.commit()
     return jsonify(id=user.id,userid=user.userid,username=user.username,realname=user.realname,email=user.email)
 
-@app.route('/users/<int:username>', methods=['DELETE'])
+@app.route('/users/<username>', methods=['DELETE'])
 def delete_user(username):
     session = db_session()
     try:
@@ -109,11 +109,11 @@ def get_kegs():
     return jsonify({'kegs': all_kegs})
 
 
-@app.route('/kegs/<int:keg_id>', methods=['GET'])
-def get_keg(keg_id):
+@app.route('/kegs/<int:kegid>', methods=['GET'])
+def get_keg(kegid):
     session = db_session()
     try:
-        keg = session.query(Keg).filter_by(id=keg_id).one()
+        keg = session.query(Keg).filter_by(kegid=kegid).one()
     except:
         abort(404)
     return jsonify(id=keg.id,amount=keg.amount,kegid=keg.kegid)
@@ -135,13 +135,13 @@ def create_keg():
         abort(404)
     return jsonify(id=keg.id,amount=keg.amount,kegid=keg.kegid)
 
-@app.route('/kegs/<int:keg_id>', methods=['PUT'])
-def update_keg(keg_id):
+@app.route('/kegs/<int:kegid>', methods=['PUT'])
+def update_keg(kegid):
     session = db_session()
     try:
         if not request.json:
             abort(400)
-        keg = session.query(Keg).filter_by(id=keg_id).one()
+        keg = session.query(Keg).filter_by(kegid=kegid).one()
         if 'amount' in request.json:
             keg.amount = request.json['amount']
         if 'kegid' in request.json:
@@ -152,11 +152,11 @@ def update_keg(keg_id):
     session.commit()
     return jsonify(id=keg.id,amount=keg.amount,kegid=keg.kegid)
 
-@app.route('/kegs/<int:keg_id>', methods=['DELETE'])
-def delete_keg(keg_id):
+@app.route('/kegs/<int:kegid>', methods=['DELETE'])
+def delete_keg(kegid):
     session = db_session()
     try:
-        keg = session.query(Keg).filter_by(id=keg_id).one()
+        keg = session.query(Keg).filter_by(kegid=keg_id).one()
         session.delete(keg)
         session.commit()
     except:
