@@ -20,7 +20,7 @@ users = [
     "Delsams",
     "Godia",
     "Mateu"
-
+]
 
 class FakeNFCReader(object):
     """
