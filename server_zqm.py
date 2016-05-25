@@ -22,31 +22,28 @@ def db_session():
     session = DBSession()
     return session
 
-def sava_data(message):
+def save_data(message):
     #Aqui guardarem el messsage rebut(que constara del NFC's id i la quantitat de birra)
     try:
         #desglosem en variables
         message1 = message.split(" ")
         userid = message1[0]
-        amount = int(message1[1])
+        amount = float(message1[1])
         keg = int(message1[2])
         print userid, " ", amount, " ", keg
         #load session
-        print "abans session"
         session = db_session()
-        print "despres session"
         #primer de tot, buscar a la taula la quantitat de birra que ha vegut un id,
         #actualitzar aquest valor sumant lo que hi havia i lo nou
         user = session.query(User).filter_by(userid = userid)
-        print "User primer:", user
-	try:
+        try:
            user = user.one()
-           print "User segon:", user
+           print "User fantasma\n"
         except:
            new_user = User(username='No_ident', userid=userid, realname='fantasma', email='no email', amount=amount)
            session.add(new_user)
            session.commit()
-           print 'new user saved ', new_user
+           print 'new user saved\n'
         #
         amount_total = user.amount + amount
         user.amount = amount_total
@@ -59,7 +56,7 @@ def sava_data(message):
         session.commit()
         return True
     except Exception as e:
-        print e
+        #print e
         return False
 
 
@@ -67,7 +64,7 @@ def sava_data(message):
 while True:
     message = sock.recv()
     if message is not None:
-        save = self.save_data(message)
+        save = save_data(message)
     if save is True:
         sock.send("Ha estat guardat correctament")
     else:
