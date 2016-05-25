@@ -1,5 +1,6 @@
 from __future__ import print_function
 from flask import Flask, jsonify, abort, make_response, request
+from flask import redirect, url_for, render_template
 from sqlalchemy_declarative import User, Keg, Base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -28,16 +29,16 @@ def bad_request(error):
     return make_response(jsonify({'error': 'Bad request'}), 400)
 
 
-#Users CRUD
+#Users Web Service CRUD
 
-@app.route('/users', methods=['GET'])
+@app.route('/web_service/users', methods=['GET'])
 def get_users():
     session = db_session()
     users = session.query(User).all()
     all_users=[ user.__json__() for user in users]
     return jsonify({'users': all_users})
 
-@app.route('/users/<username>', methods=['GET'])
+@app.route('/web_service/users/<username>', methods=['GET'])
 def get_user(username):
     session = db_session()
     try:
@@ -46,7 +47,7 @@ def get_user(username):
         abort(404)
     return jsonify(id=user.id,userid=user.userid,username=user.username,realname=user.realname,email=user.email)
 
-@app.route('/users', methods=['POST'])
+@app.route('/web_service/users', methods=['POST'])
 def create_user():
     if not request.json or not 'userid' in request.json or not 'username' in request.json or not 'realname' in request.json or not 'email' in request.json:
         abort(400)
@@ -60,7 +61,7 @@ def create_user():
     session.commit()
     return jsonify(id=user.id,userid=user.userid,username=user.username,realname=user.realname,email=user.email)
 
-@app.route('/users/<username>', methods=['PUT'])
+@app.route('/web_service/users/<username>', methods=['PUT'])
 def update_user(username):
     session = db_session()
     try:
@@ -81,7 +82,7 @@ def update_user(username):
     session.commit()
     return jsonify(id=user.id,userid=user.userid,username=user.username,realname=user.realname,email=user.email)
 
-@app.route('/users/<username>', methods=['DELETE'])
+@app.route('/web_service/users/<username>', methods=['DELETE'])
 def delete_user(username):
     session = db_session()
     try:
@@ -93,9 +94,9 @@ def delete_user(username):
     return jsonify({'result': True})
 
 
-#Keg CRUD
+#Keg Web Service CRUD
 
-@app.route('/kegs', methods=['GET'])
+@app.route('/web_service/kegs', methods=['GET'])
 def get_kegs():
     session = db_session()
     kegs = session.query(Keg).all()
@@ -103,7 +104,7 @@ def get_kegs():
     return jsonify({'kegs': all_kegs})
 
 
-@app.route('/kegs/<int:kegid>', methods=['GET'])
+@app.route('/web_service/kegs/<int:kegid>', methods=['GET'])
 def get_keg(kegid):
     session = db_session()
     try:
@@ -112,7 +113,7 @@ def get_keg(kegid):
         abort(404)
     return jsonify(id=keg.id,amount=keg.amount,kegid=keg.kegid)
 
-@app.route('/kegs', methods=['POST'])
+@app.route('/web_service/kegs', methods=['POST'])
 def create_keg():
     if not request.json or not 'amount' in request.json or not 'kegid' in request.json:
         abort(400)
@@ -125,7 +126,7 @@ def create_keg():
         abort(404)
     return jsonify(id=keg.id,amount=keg.amount,kegid=keg.kegid)
 
-@app.route('/kegs/<int:kegid>', methods=['PUT'])
+@app.route('/web_service/kegs/<int:kegid>', methods=['PUT'])
 def update_keg(kegid):
     session = db_session()
     try:
@@ -140,7 +141,7 @@ def update_keg(kegid):
     session.commit()
     return jsonify(id=keg.id,amount=keg.amount,kegid=keg.kegid)
 
-@app.route('/kegs/<int:kegid>', methods=['DELETE'])
+@app.route('/web_service/kegs/<int:kegid>', methods=['DELETE'])
 def delete_keg(kegid):
     session = db_session()
     try:
@@ -150,6 +151,74 @@ def delete_keg(kegid):
     except:
         abort(404)
     return jsonify({'result': True})
+
+
+#Functions
+
+def get_users_data():
+    session = db_session()
+    user = session.query(User).all()
+    list_of_lists=[]
+    for row in user:
+        list_of_lists.append((row.userid,row.username,row.realname,row.email,row.amount))
+    return list_of_lists
+
+def user_exists(username):
+    session = db_session()
+    try:
+        print (username)
+        user = session.query(User).filter_by(username=username).one()
+        print (user)
+        session.commit()
+        return True
+    except:
+        print ("idfhiusdhfguihysdifgh")
+        session.commit()
+        return False
+
+def save_user(username,fullname,email,userid):
+    if user_exists(username):
+        return False
+    else:
+        try:
+            session = db_session()
+            new_user = User(username=username, realname=fullname, email=email, userid=userid)
+            session.add(new_user)
+            session.commit()
+            return True
+        except:
+            return False
+
+#Routes
+
+@app.route('/')
+def hello1():
+    return render_template('landing_page1.html')
+
+@app.route('/web_app')
+def hello():
+    return render_template('landing_page.html')
+
+@app.route('/web_app/show_users', methods=['GET', 'POST'])
+def hist_data():
+    historical_data = get_users_data()
+    return render_template('show_users_table.html',historical_data=historical_data)
+
+
+
+@app.route('/web_app/insert_user', methods=['GET', 'POST'])
+def user_register():
+    if request.method == 'GET':
+        return render_template('insert_user.html')
+    elif request.method == 'POST':
+        username = request.form.get('username')
+        fullname = request.form.get('fullname')
+        email = request.form.get('email')
+        userid = request.form.get('userid')
+        if save_user(username,fullname,email,userid):
+            return render_template('user_register_succesfully.html',username=username,realname=fullname)
+        else:
+            return render_template('register_error.html')
 
 
 if __name__ == '__main__':
