@@ -22,7 +22,7 @@ def db_session():
     session = DBSession()
     return session
 
-def sava_data(message):
+def save_data(message):
     #Aqui guardarem el messsage rebut(que constara del NFC's id i la quantitat de birra)
     try:
         #desglosem en variables
@@ -39,7 +39,7 @@ def sava_data(message):
         #actualitzar aquest valor sumant lo que hi havia i lo nou
         user = session.query(User).filter_by(userid = userid)
         print "User primer:", user
-	try:
+	    try:
            user = user.one()
            print "User segon:", user
         except:
