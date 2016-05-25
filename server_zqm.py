@@ -56,7 +56,7 @@ def save_data(message):
         session.commit()
         return True
     except Exception as e:
-        print e
+        #print e
         return False
 
 
