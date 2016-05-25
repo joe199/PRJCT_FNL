@@ -40,7 +40,7 @@ class FlowControl(object):
         if a == True:
             self.uid = self.nfc.read_uid()
         else:
-            self.uid = 0
+            self.uid = None
         self.uid_hexa = ''.join(format(x, '02x') for x in self.uid)
 
         return True
