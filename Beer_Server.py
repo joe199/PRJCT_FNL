@@ -37,11 +37,11 @@ def get_users():
     all_users=[ user.__json__() for user in users]
     return jsonify({'users': all_users})
 
-@app.route('/users/<int:user_id>', methods=['GET'])
-def get_user(user_id):
+@app.route('/users/<int:username>', methods=['GET'])
+def get_user(username):
     session = db_session()
     try:
-        user = session.query(User).filter_by(id=user_id).one()
+        user = session.query(User).filter_by(username=username).one()
     except:
         abort(404)
     return jsonify(id=user.id,userid=user.userid,username=user.username,realname=user.realname,email=user.email)
@@ -66,13 +66,13 @@ def create_user():
     session.commit()
     return jsonify(id=user.id,userid=user.userid,username=user.username,realname=user.realname,email=user.email)
 
-@app.route('/users/<int:user_id>', methods=['PUT'])
-def update_user(user_id):
+@app.route('/users/<int:username>', methods=['PUT'])
+def update_user(username):
     session = db_session()
     try:
         if not request.json:
             abort(400)
-        user = session.query(User).filter_by(id=user_id).one()
+        user = session.query(User).filter_by(username=username).one()
         if 'userid' in request.json:
             user.userid = request.json['userid']
         if 'username' in request.json:
@@ -87,11 +87,11 @@ def update_user(user_id):
     session.commit()
     return jsonify(id=user.id,userid=user.userid,username=user.username,realname=user.realname,email=user.email)
 
-@app.route('/users/<int:user_id>', methods=['DELETE'])
-def delete_user(user_id):
+@app.route('/users/<int:username>', methods=['DELETE'])
+def delete_user(username):
     session = db_session()
     try:
-        user = session.query(User).filter_by(id=user_id).one()
+        user = session.query(User).filter_by(username=username).one()
         session.delete(user)
         session.commit()
     except:
