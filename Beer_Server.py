@@ -99,6 +99,23 @@ def save_keg(kegid):
         except:
             return False
 
+def update_user_app(username,fullname,email,userid,amount):
+    session = db_session()
+    try:
+        user = session.query(User).filter_by(username=username).one()
+        if userid != '':
+            user.userid = userid
+        if fullname != '':
+            user.realname = fullname
+        if email != '':
+            user.email = email
+        if amount != '':
+            user.amount = amount
+    except:
+        session.commit()
+        return False
+    session.commit()
+    return True
 
 #CRUD (CREATE, READ, UPDATE, DELETE):
 
@@ -268,6 +285,20 @@ def update_keg(kegid):
 # UPDATE FROM WEB APP
 
 #Update user
+@app.route('/web_app/update_user', methods=['GET', 'POST'])
+def user_update():
+    if request.method == 'GET':
+        return render_template('update_keg.html')
+    elif request.method == 'POST':
+        username = request.form.get('username')
+        fullname = request.form.get('fullname')
+        email = request.form.get('email')
+        userid = request.form.get('userid')
+        amount = request.form.get('amount')
+        if update_user_app(username,fullname,email,userid, amount):
+            return render_template('user_update_succesfully.html', realname=fullname)
+        else:
+            return render_template('error.html')
 
 #Update keg
 
