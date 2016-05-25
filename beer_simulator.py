@@ -9,6 +9,7 @@ Options:
 """
 from docopt import docopt
 import time
+import client_sensor
 # import RPi.GPIO as GPIO
 import random
 
@@ -63,8 +64,10 @@ class FlowControl(object):
         self.service = 0
         self.total = 0
         self.user = -2
+        self.sortidor = 1
         self.nfc = nfc
         self.server = server
+        self.client=client_sensor.client_sensor()
 
     def _get_user(self):
         if self.nfc is not None:
@@ -87,9 +90,11 @@ class FlowControl(object):
                 print "+"
                 print "user", self.user, " drank ", self.service
                 self.server.update_score("1", self.user, self.service)
+                self.client.enviar(self.user, self.service, self.sortidor)
             # Guardar a usuari self.service
             self.service = 0
             self.user = self._get_user()
+
 
         self.previousTime = tim
 
