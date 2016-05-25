@@ -28,25 +28,22 @@ def save_data(message):
         #desglosem en variables
         message1 = message.split(" ")
         userid = message1[0]
-        amount = int(message1[1])
+        amount = float(message1[1])
         keg = int(message1[2])
         print userid, " ", amount, " ", keg
         #load session
-        print "abans session"
         session = db_session()
-        print "despres session"
         #primer de tot, buscar a la taula la quantitat de birra que ha vegut un id,
         #actualitzar aquest valor sumant lo que hi havia i lo nou
         user = session.query(User).filter_by(userid = userid)
-        print "User primer:", user
         try:
            user = user.one()
-           print "User segon:", user
+           print "User fantasma\n"
         except:
            new_user = User(username='No_ident', userid=userid, realname='fantasma', email='no email', amount=amount)
            session.add(new_user)
            session.commit()
-           print 'new user saved ', new_user
+           print 'new user saved\n'
         #
         amount_total = user.amount + amount
         user.amount = amount_total
