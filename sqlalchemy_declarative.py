@@ -28,7 +28,7 @@ class User(Base):
 class Keg(Base):
     __tablename__ = 'keg'
     id = Column(Integer, primary_key=True)
-    amount = Column(Real)
+    amount = Column(Integer)
     kegid = Column(Integer)
 
     def __repr__(self):
