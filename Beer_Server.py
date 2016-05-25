@@ -39,6 +39,14 @@ def get_users_data():
         list_of_lists.append((row.userid,row.username,row.realname,row.email,row.amount))
     return list_of_lists
 
+def get_kegs_data():
+    session = db_session()
+    keg = session.query(Keg).all()
+    list_of_lists=[]
+    for row in keg:
+        list_of_lists.append((row.kegid,row.amount))
+    return list_of_lists
+
 def user_exists(username):
     session = db_session()
     try:
@@ -201,13 +209,17 @@ def get_keg(kegid):
 
 #Read all users
 @app.route('/web_app/show_users', methods=['GET', 'POST'])
-def hist_data():
+def hist_data_users():
     historical_data = get_users_data()
     return render_template('show_users_table.html',historical_data=historical_data)
 
 #Read user
 
 #Read all kegs
+@app.route('/web_app/show_kegs', methods=['GET', 'POST'])
+def hist_data_kegs():
+    historical_data = get_kegs_data()
+    return render_template('show_kegs_table.html',historical_data=historical_data)
 
 #Read keg
 
