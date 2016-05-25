@@ -6,7 +6,7 @@ from sqlalchemy.orm import sessionmaker
 
 app = Flask(__name__)
 
-#DB Session
+#Innit DB Session
 
 def db_session():
     path_to_db = "beer_coholic.db"
@@ -52,13 +52,7 @@ def create_user():
         abort(400)
     session = db_session()
     try:
-        user = {
-            'id': users[-1]['id'] + 1,
-            'userid': request.json['userid'],
-            'username': request.json['username'],
-            'realname': request.json['realname'],
-            'email': request.json['email'],
-        }
+        user = User(userid=request.json['userid'], username=request.json['username'], realname=request.json['realname'], email=request.json['email'], amount=0)
         session.add(user)
     except:
         session.commit()
@@ -75,12 +69,12 @@ def update_user(username):
         user = session.query(User).filter_by(username=username).one()
         if 'userid' in request.json:
             user.userid = request.json['userid']
-        if 'username' in request.json:
-            user.username = request.json['username']
         if 'realname' in request.json:
             user.realname = request.json['realname']
         if 'email' in request.json:
             user.email = request.json['email']
+        if 'amount' in request.json:
+            user.amount = request.json['amount']
     except:
         session.commit()
         abort(404)
@@ -124,11 +118,7 @@ def create_keg():
         abort(400)
     session = db_session()
     try:
-        keg = {
-            'id': users[-1]['id'] + 1,
-            'amount': request.json['amount'],
-            'kegid': request.json['kegid'],
-        }
+        keg = Keg(amount=request.json['amount'], kegid=request.json['kegid'])
         session.add(keg)
         session.commit()
     except:
@@ -144,8 +134,6 @@ def update_keg(kegid):
         keg = session.query(Keg).filter_by(kegid=kegid).one()
         if 'amount' in request.json:
             keg.amount = request.json['amount']
-        if 'kegid' in request.json:
-            keg.kegid = request.json['kegid']
     except:
         session.commit()
         abort(404)
@@ -156,7 +144,7 @@ def update_keg(kegid):
 def delete_keg(kegid):
     session = db_session()
     try:
-        keg = session.query(Keg).filter_by(kegid=keg_id).one()
+        keg = session.query(Keg).filter_by(kegid=kegid).one()
         session.delete(keg)
         session.commit()
     except:
