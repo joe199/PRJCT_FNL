@@ -117,6 +117,17 @@ def update_user_app(username,fullname,email,userid,amount):
     session.commit()
     return True
 
+def update_keg_app(kegid,amount):
+    session = db_session()
+    try:
+        keg = session.query(Keg).filter_by(kegid=kegid).one()
+        keg.amount = amount
+    except:
+        session.commit()
+        return False
+    session.commit()
+    return True
+
 #CRUD (CREATE, READ, UPDATE, DELETE):
 
 
@@ -288,7 +299,7 @@ def update_keg(kegid):
 @app.route('/web_app/update_user', methods=['GET', 'POST'])
 def user_update():
     if request.method == 'GET':
-        return render_template('update_keg.html')
+        return render_template('update_user.html')
     elif request.method == 'POST':
         username = request.form.get('username')
         fullname = request.form.get('fullname')
@@ -301,6 +312,17 @@ def user_update():
             return render_template('error.html')
 
 #Update keg
+@app.route('/web_app/update_keg', methods=['GET', 'POST'])
+def keg_update():
+    if request.method == 'GET':
+        return render_template('update_keg.html')
+    elif request.method == 'POST':
+        kegid = request.form.get('kegid')
+        amount = request.form.get('amount')
+        if update_keg_app(kegid, amount):
+            return render_template('keg_update_succesfully.html', amount=amount)
+        else:
+            return render_template('error.html')
 
 
 #DELETE FROM WEB SERVICE
