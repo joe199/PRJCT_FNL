@@ -6,6 +6,9 @@ from sqlalchemy_declarative import User, Keg, Base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+import sys
+import sqlite3
+
 app = Flask(__name__)
 
 #INNIT DB SESSION
@@ -150,6 +153,23 @@ def delete_keg_function(kegid):
         return False
     session.commit()
     return True
+
+def get_username():
+
+    conn = sqlite3.connect('beer_coholic.db')
+    cursor = conn.execute("select distinct username from users;")
+    data = [row[0] for row in cursor]
+    conn.close()
+    return data
+
+
+    session = db_session()
+    user = session.query(User).username()
+    print (user)
+    session.commit()
+    username = []
+
+    return user
 
 #CRUD (CREATE, READ, UPDATE, DELETE):
 
@@ -321,10 +341,13 @@ def update_keg(kegid):
 #Update user
 @app.route('/web_app/update_user', methods=['GET', 'POST'])
 def user_update():
+    usernames = get_username()
     if request.method == 'GET':
-        return render_template('update_user.html')
+        print (usernames)
+        return render_template('update_user.html', usernames=usernames)
     elif request.method == 'POST':
-        username = request.form.get('username')
+        username = request.form.get('user_name')
+        print (username)
         fullname = request.form.get('fullname')
         email = request.form.get('email')
         userid = request.form.get('userid')

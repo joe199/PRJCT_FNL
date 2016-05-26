@@ -1,14 +1,24 @@
 <html>
  <title>Edit User</title>
 
-
+ <body>
     <h2>Editing an user...</h2>
-    <form action="/web_app/update_user" method="post">
-      <p>Username From User To Edit: <input type="text" name="username" required></p>
+    <form action="/web_app/update_user" id="getform" method="post">
+
+      <p>Username From User To Edit:
+      <select name="user_name" form="getform">
+      {% for username1 in usernames%}
+      <option value="{{username1}}">{{username1}}</option>
+      {% endfor %}
+      </select>
+      </p>
+
       <p>New Full Name: <input type="text" name="fullname"></p>
       <p>New User id: <input type="text" name="userid"></p>
       <p>New Email: <input type="text" name="email"></p>
       <p>New Amount: <input type="text" name="amount"></p>
       <input type="submit" value="Submit">
+
     </form>
+  </body>
 </html>
