@@ -1,3 +1,4 @@
+
 from __future__ import print_function
 from flask import Flask, jsonify, abort, make_response, request
 from flask import redirect, url_for, render_template
@@ -122,6 +123,28 @@ def update_keg_app(kegid,amount):
     try:
         keg = session.query(Keg).filter_by(kegid=kegid).one()
         keg.amount = amount
+    except:
+        session.commit()
+        return False
+    session.commit()
+    return True
+
+def delete_user_function(username):
+    session = db_session()
+    try:
+        user = session.query(User).filter_by(username=username).one()
+        session.delete(user)
+    except:
+        session.commit()
+        return False
+    session.commit()
+    return True
+
+def delete_keg_function(kegid):
+    session = db_session()
+    try:
+        keg = session.query(Keg).filter_by(kegid=kegid).one()
+        session.delete(keg)
     except:
         session.commit()
         return False
@@ -355,9 +378,30 @@ def delete_keg(kegid):
 #DELETE FROM WEB APP
 
 #Delete user
+@app.route('/web_app/delete_user', methods=['GET', 'POST'])
+def delete_user_app():
+    session = db_session()
+    if request.method == 'GET':
+        return render_template('delete_user.html')
+    elif request.method == 'POST':
+        username = request.form.get('username')
+        if delete_user_function(username):
+            return render_template('user_delete_succesfully.html')
+        else:
+            return render_template('error.html')
 
 #Delete keg
-
+@app.route('/web_app/delete_keg', methods=['GET', 'POST'])
+def delete_keg_app():
+    session = db_session()
+    if request.method == 'GET':
+        return render_template('delete_keg.html')
+    elif request.method == 'POST':
+        keg = request.form.get('kegid')
+        if delete_keg_function(keg):
+            return render_template('keg_delete_succesfully.html')
+        else:
+            return render_template('error.html')
 
 
 
