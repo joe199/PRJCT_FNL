@@ -24,43 +24,42 @@ def db_session():
 
 def save_data(message):
     #Aqui guardarem el messsage rebut(que constara del NFC's id i la quantitat de birra)
-
+    try:
         #desglosem en variables
-    message1 = message.split(" ")
-    userid = message1[0]
-    amount = float(message1[1])
-    keg = int(message1[2])
-    print userid, " ", amount, " ", keg
-    #load session
-    session = db_session()
-    #primer de tot, buscar a la taula la quantitat de birra que ha vegut un id,
-    #actualitzar aquest valor sumant lo que hi havia i lo nou
-    user = session.query(User).filter_by(userid = userid)
-    try:
-       user = user.one()
-       print "User fantasma\n"
-    except:
-       new_user = User(username='No_ident', userid=userid, realname='fantasma', email='no email', amount=amount)
-       session.add(new_user)
-       session.commit()
-       print 'new user saved\n'
-    try:
-        amount_total = user.amount + amount
-        user.amount = amount_total
-        session.commit()
-    except:
-        print "no ha fet el sesion commit"
-    try:
-        #guardem a la taula keg, la nova etrada
-        keg1 = session.query(Keg).filter_by(kegid = kegid).one()
-        amount_total1 = keg1.amount + amount
-    except:
-        print "no guarda be al keg"
+        message1 = message.split(" ")
+        userid = message1[0]
+        amount = float(message1[1])
+        keg = int(message1[2])
+        print '\n rebut', userid, " ", amount, " ", keg
+        #load session
+        session = db_session()
+        #primer de tot, buscar a la taula la quantitat de birra que ha vegut un id,
+        #actualitzar aquest valor sumant lo que hi havia i lo nou
+        user = session.query(User).filter_by(userid = userid)
+        try:
+           user = user.one()
+        except:
+           new_user = User(username='No_ident', userid=userid, realname='fantasma', email='no email', amount=amount)
+           session.add(new_user)
+           session.commit()
 
+        amount_total = float(user.amount) + amount
+        user.amount = amount_total
+        print 'user.amount = ', user.amount
+        session.commit()
+
+            #guardem a la taula keg, la nova etrada
+        keg1 = session.query(Keg).filter_by(kegid = keg).one()
+        amount_total1 = float(keg1.amount) + amount
         keg1.amount = amount_total1
+        print 'keg1.amount2= ', keg1.amount
+
         session.commit()
         return True
-    session.commit()
+    except:
+        return False
+
+
 
 
 # Run a simple "Echo" server
