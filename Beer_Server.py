@@ -312,21 +312,10 @@ def read_users_app():
     return render_template('show_users_table.html',historical_data=historical_data)
 
 #Read user
-@app.route('/web_app/show_user', methods=['GET', 'POST'])
-def read_user_app():
-    users = get_usernames()
-    if request.method == 'GET':
-        users_data = []
-    elif request.method == 'POST':
-        user = request.form.get('usuari')
-        print ('-' *90)
-        print(user)
-        print ('-' *90)
-        users_data = get_users_all_data(user)
-        print ('*' *90)
-        print(users_data)
-        print ('*' *90)
-    return render_template('show_all_users_table.html',users_data=users_data, users=users)
+@app.route('/web_app/users/<username>', methods=['GET', 'POST'])
+def read_user_app(username):
+    users_data = get_users_all_data(username)
+    return render_template('show_one_user.html',users_data=users_data)
 
 #Read all kegs
 @app.route('/web_app/show_kegs', methods=['GET', 'POST'])
@@ -335,22 +324,10 @@ def read_kegs_app():
     return render_template('show_kegs_table.html',historical_data=historical_data)
 
 #Read keg
-@app.route('/web_app/show_keg', methods=['GET', 'POST'])
-def read_keg_app():
-    kegs = get_kegs()
-    if request.method == 'GET':
-        kegs_data = []
-    elif request.method == 'POST':
-        keg = request.form.get('sortidor')
-        print ('-' *90)
-        print(keg)
-        print ('-' *90)
-        kegs_data = get_kegs_all_data(keg)
-        print ('*' *90)
-        print(kegs_data)
-        print ('*' *90)
-    return render_template('show_all_kegs_table.html',kegs_data=kegs_data, kegs=kegs)
-
+@app.route('/web_app/kegs/<kegid>', methods=['GET', 'POST'])
+def read_keg_app(kegid):
+    kegs_data = get_kegs_all_data(kegid)
+    return render_template('show_one_keg.html',kegs_data=kegs_data)
 
 
 #UPDATE FROM WEB SERVICE

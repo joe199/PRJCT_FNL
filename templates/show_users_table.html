@@ -35,9 +35,8 @@ table#t01 th	{
       </tr>
 	{% for row in historical_data %}
           <tr>
-	  {% for cell in row %}
-	    <td> {{cell}} </td>
-	  {% endfor %}
+            <td><a href="users/{{row[0]}}">{{row[0]}}</a></td>
+	          <td> {{row[1]}} </td>
 	  </tr>
 	{% endfor %}
     </table>
