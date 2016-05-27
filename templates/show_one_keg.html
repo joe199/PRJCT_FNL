@@ -1,47 +1,14 @@
 <html>
-  <head>
-    <title>Historical Users Data</title>
-  </head>
-  <style>
-table {
-    width:100%;
-}
-table, th, td {
-    border: 1px solid black;
-    border-collapse: collapse;
-}
-th, td {
-    padding: 5px;
-    text-align: centre;
-}
-table#t01 tr:nth-child(even) {
-    background-color: #ede778;
-}
-table#t01 tr:nth-child(odd) {
-   background-color:#fac09c;
-}
-table#t01 th	{
-    background-color: #41a8ba;
-    color: black;
-}
-</style>
-  <body>
-    <h1 style="color:blue;">Keg Data<hr></h1>
+ <title>Edit Keg</title>
 
-    <table border= "1" id="t01">
-      <tr>
-  <th>Keg Id</th>
-  <th>Beer</th>
-      </tr>
-	{% for row in kegs_data %}
-          <tr>
-	  {% for cell in row %}
-	    <td> {{cell}} </td>
-	  {% endfor %}
-	  </tr>
-	{% endfor %}
-    </table>
+    <h2>Keg {{kegs_data[0][0]}}</h2>
+    <form action="/web_app/update_keg" id="getform" method="post">
+      <input type="hidden" name="kegid" value="{{kegs_data[0][0]}}">
+      <p>New Amount: <input type="text" name="amount" value="{{kegs_data[0][1]}}" required></p>
+      <input type="submit" value="Update">
+    </form>
 
-
-  </body>
+    <form action="/web_app/delete_keg" id="getform" method="post">
+      <input type="hidden" name="kegid" value="{{kegs_data[0][0]}}">
+      <input type="submit" value="Delete">
 </html>

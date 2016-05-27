@@ -371,35 +371,27 @@ def update_keg_service(kegid):
 # UPDATE FROM WEB APP
 
 #Update user
-@app.route('/web_app/update_user', methods=['GET', 'POST'])
+@app.route('/web_app/update_user', methods=['POST'])
 def update_user_app():
-    usernames = get_usernames()
-    if request.method == 'GET':
-        return render_template('update_user.html', usernames=usernames)
-    elif request.method == 'POST':
-        username = request.form.get('user_name')
-        fullname = request.form.get('fullname')
-        email = request.form.get('email')
-        userid = request.form.get('userid')
-        amount = request.form.get('amount')
-        if update_user(username,fullname,email,userid, amount):
-            return render_template('user_update_succesfully.html', realname=fullname)
-        else:
-            return render_template('error.html')
+    username = request.form.get('user_name')
+    fullname = request.form.get('fullname')
+    email = request.form.get('email')
+    userid = request.form.get('userid')
+    amount = request.form.get('amount')
+    if update_user(username,fullname,email,userid, amount):
+        return render_template('user_update_succesfully.html', realname=fullname)
+    else:
+        return render_template('error.html')
 
 #Update keg
-@app.route('/web_app/update_keg', methods=['GET', 'POST'])
+@app.route('/web_app/update_keg', methods=['POST'])
 def update_keg_app():
-    kegs = get_kegs()
-    if request.method == 'GET':
-        return render_template('update_keg.html', kegs=kegs)
-    elif request.method == 'POST':
-        kegid = request.form.get('kegid')
-        amount = request.form.get('amount')
-        if update_keg(kegid, amount):
-            return render_template('keg_update_succesfully.html', amount=amount)
-        else:
-            return render_template('error.html')
+    kegid = request.form.get('kegid')
+    amount = request.form.get('amount')
+    if update_keg(kegid, amount):
+        return render_template('keg_update_succesfully.html', amount=amount)
+    else:
+        return render_template('error.html')
 
 
 #DELETE FROM WEB SERVICE
@@ -432,30 +424,22 @@ def delete_keg_service(kegid):
 #DELETE FROM WEB APP
 
 #Delete user
-@app.route('/web_app/delete_user', methods=['GET', 'POST'])
+@app.route('/web_app/delete_user', methods=['POST'])
 def delete_user_app():
-    usernames = get_usernames()
-    if request.method == 'GET':
-        return render_template('delete_user.html', usernames=usernames)
-    elif request.method == 'POST':
-        username = request.form.get('username')
-        if delete_user(username):
-            return render_template('user_delete_succesfully.html')
-        else:
-            return render_template('error.html')
+    username = request.form.get('username')
+    if delete_user(username):
+        return render_template('user_delete_succesfully.html')
+    else:
+        return render_template('error.html')
 
 #Delete keg
-@app.route('/web_app/delete_keg', methods=['GET', 'POST'])
+@app.route('/web_app/delete_keg', methods=['POST'])
 def delete_keg_app():
-    kegs = get_kegs()
-    if request.method == 'GET':
-        return render_template('delete_keg.html', kegs=kegs)
-    elif request.method == 'POST':
-        keg = request.form.get('kegid')
-        if delete_keg(keg):
-            return render_template('keg_delete_succesfully.html')
-        else:
-            return render_template('error.html')
+    keg = request.form.get('kegid')
+    if delete_keg(keg):
+        return render_template('keg_delete_succesfully.html')
+    else:
+        return render_template('error.html')
 
 
 #MAIN ROUTES

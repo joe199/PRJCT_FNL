@@ -1,50 +1,18 @@
 <html>
-  <head>
-    <title>Historical Users Data</title>
-  </head>
-  <style>
-table {
-    width:100%;
-}
-table, th, td {
-    border: 1px solid black;
-    border-collapse: collapse;
-}
-th, td {
-    padding: 5px;
-    text-align: centre;
-}
-table#t01 tr:nth-child(even) {
-    background-color: #ede778;
-}
-table#t01 tr:nth-child(odd) {
-   background-color:#fac09c;
-}
-table#t01 th	{
-    background-color: #41a8ba;
-    color: black;
-}
-</style>
-  <body>
-    <h1 style="color:blue;">User Data<hr></h1>
+ <title>Edit User</title>
 
-    <table border= "1" id="t01">
-      <tr>
-  <th>User Id</th>
-	<th>Username</th>
-  <th>Fullname</th>
-  <th>Email</th>
-  <th>Beer</th>
-      </tr>
-	{% for row in users_data %}
-          <tr>
-	  {% for cell in row %}
-	    <td> {{cell}} </td>
-	  {% endfor %}
-	  </tr>
-	{% endfor %}
-    </table>
+    <h2>User {{users_data[0][1]}}</h2>
+    <form action="/web_app/update_user" id="updateform" method="post">
+      <input type="hidden" name="user_name" value="{{users_data[0][1]}}">
+      <p>New Full Name: <input type="text" name="fullname" value="{{users_data[0][0]}}"></p>
+      <p>New User id: <input type="text" name="userid" value="{{users_data[0][2]}}"></p>
+      <p>New Email: <input type="text" name="email" value="{{users_data[0][3]}}"></p>
+      <p>New Amount: <input type="text" name="amount" value="{{users_data[0][4]}}"></p>
+      <input type="submit" value="Update" >
+    </form>
 
-
-  </body>
+    <form action="/web_app/delete_user" id="deleteform" method="post">
+      <input type="hidden" name="username" value="{{users_data[0][1]}}">
+      <input type="submit" value="Delete">
+    </form>
 </html>
