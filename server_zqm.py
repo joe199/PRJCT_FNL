@@ -54,12 +54,12 @@ def save_data(message):
         #guardem a la taula keg, la nova etrada
         keg1 = session.query(Keg).filter_by(kegid = kegid).one()
         amount_total1 = keg1.amount + amount
-    except:
-        print "no guarda be al keg"
-
         keg1.amount = amount_total1
         session.commit()
         return True
+    except:
+        print "no guarda be al keg"
+
     session.commit()
 
 
