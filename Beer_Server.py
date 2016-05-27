@@ -56,6 +56,18 @@ def get_users_all_data(username):
         session.commit()
         return "FAIL"
 
+def get_kegs_all_data(kegid):
+    session = db_session()
+    try:
+        kegall = session.query(Keg).filter_by(kegid=kegid).one()
+        keg = []
+        keg.append((kegall.kegid, kegall.amount))
+        session.commit()
+        return keg
+    except:
+        session.commit()
+        return "FAIL"
+
 def get_kegs_data():
     session = db_session()
     keg = session.query(Keg).all()
@@ -222,7 +234,6 @@ def create_keg_service():
 #CREATE FROM WEB APP
 
 #Create user
-#Not working chech if username exists
 @app.route('/web_app/insert_user', methods=['GET', 'POST'])
 def create_user_app():
     if request.method == 'GET':
@@ -238,7 +249,6 @@ def create_user_app():
             return render_template('error.html')
 
 #Create keg
-#Not working chech if kegid exists
 @app.route('/web_app/insert_keg', methods=['GET', 'POST'])
 def create_keg_app():
     if request.method == 'GET':
@@ -312,7 +322,6 @@ def read_user_app():
         print ('-' *90)
         print(user)
         print ('-' *90)
-        user = "Costar93"
         users_data = get_users_all_data(user)
         print ('*' *90)
         print(users_data)
@@ -326,6 +335,22 @@ def read_kegs_app():
     return render_template('show_kegs_table.html',historical_data=historical_data)
 
 #Read keg
+@app.route('/web_app/show_keg', methods=['GET', 'POST'])
+def read_keg_app():
+    kegs = get_kegs()
+    if request.method == 'GET':
+        kegs_data = []
+    elif request.method == 'POST':
+        keg = request.form.get('sortidor')
+        print ('-' *90)
+        print(keg)
+        print ('-' *90)
+        kegs_data = get_kegs_all_data(keg)
+        print ('*' *90)
+        print(kegs_data)
+        print ('*' *90)
+    return render_template('show_all_kegs_table.html',kegs_data=kegs_data, kegs=kegs)
+
 
 
 #UPDATE FROM WEB SERVICE

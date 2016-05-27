@@ -45,10 +45,10 @@ table#t01 th	{
 	{% endfor %}
     </table>
 
-    <form action="/web_app/show_user" id="t01" method="post">
-      <select name="usuari" form="t01">
+    <form action="/web_app/show_user" id="userform" method="post">
+      <select name="usuari" form="userform">
       {% for user in users%}
-      <option name="usuari" value="{{user}}">{{user}}</option>
+      <option value="{{user}}">{{user}}</option>
       {% endfor %}
     </select>
 
