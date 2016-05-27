@@ -56,13 +56,10 @@ def get_kegs_data():
 def user_exists(username):
     session = db_session()
     try:
-        print (username)
         user = session.query(User).filter_by(username=username).one()
-        print (user)
         session.commit()
         return True
     except:
-        print ("idfhiusdhfguihysdifgh")
         session.commit()
         return False
 
@@ -83,13 +80,10 @@ def save_user(username,fullname,email,userid):
 def keg_exists(kegid):
     session = db_session()
     try:
-        print (kegid)
         keg = session.query(Keg).filter_by(kegid=kegid).one()
-        print (keg)
         session.commit()
         return True
     except:
-        print ("idfhiusdhfguihysdifgh")
         session.commit()
         return False
 
@@ -229,7 +223,7 @@ def create_user_app():
         if save_user(username,fullname,email,userid):
             return render_template('user_register_succesfully.html',username=username,realname=fullname)
         else:
-            return render_template('register_error.html')
+            return render_template('error.html')
 
 #Create keg
 #Not working chech if kegid exists
@@ -242,7 +236,7 @@ def create_keg_app():
         if save_keg(kegid):
             return render_template('keg_register_succesfully.html',kegid=kegid)
         else:
-            return render_template('register_error.html')
+            return render_template('error.html')
 
 #READ FROM WEB SERVICE
 
