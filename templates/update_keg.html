@@ -2,9 +2,18 @@
  <title>Edit Keg</title>
 
 
-    <h2>Editing an user...</h2>
+    <h2>Editing a keg...</h2>
+    <form action="/web_app/update_keg" id="getform" method="post">
+
+      <p>Keg Id From Keg To Edit:
+      <select name="kegid" form="getform">
+      {% for keg in kegs%}
+      <option value="{{keg}}">{{keg}}</option>
+      {% endfor %}
+      </select>
+      </p>
+
     <form action="/web_app/update_keg" method="post">
-      <p>Kegid From Keg To Edit: <input type="text" name="kegid" required></p>
       <p>New Amount: <input type="text" name="amount" required></p>
       <input type="submit" value="Submit">
     </form>

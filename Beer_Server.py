@@ -41,6 +41,7 @@ def get_users_data():
     list_of_lists=[]
     for row in user:
         list_of_lists.append((row.userid,row.username,row.realname,row.email,row.amount))
+    session.commit()
     return list_of_lists
 
 def get_kegs_data():
@@ -49,6 +50,7 @@ def get_kegs_data():
     list_of_lists=[]
     for row in keg:
         list_of_lists.append((row.kegid,row.amount))
+    session.commit()
     return list_of_lists
 
 def user_exists(username):
@@ -75,6 +77,7 @@ def save_user(username,fullname,email,userid):
             session.commit()
             return True
         except:
+            session.commit()
             return False
 
 def keg_exists(kegid):
@@ -101,9 +104,10 @@ def save_keg(kegid):
             session.commit()
             return True
         except:
+            session.commit()
             return False
 
-def update_user_app(username,fullname,email,userid,amount):
+def update_user(username,fullname,email,userid,amount):
     session = db_session()
     try:
         user = session.query(User).filter_by(username=username).one()
@@ -121,7 +125,7 @@ def update_user_app(username,fullname,email,userid,amount):
     session.commit()
     return True
 
-def update_keg_app(kegid,amount):
+def update_keg(kegid,amount):
     session = db_session()
     try:
         keg = session.query(Keg).filter_by(kegid=kegid).one()
@@ -132,7 +136,7 @@ def update_keg_app(kegid,amount):
     session.commit()
     return True
 
-def delete_user_function(username):
+def delete_user(username):
     session = db_session()
     try:
         user = session.query(User).filter_by(username=username).one()
@@ -143,7 +147,7 @@ def delete_user_function(username):
     session.commit()
     return True
 
-def delete_keg_function(kegid):
+def delete_keg(kegid):
     session = db_session()
     try:
         keg = session.query(Keg).filter_by(kegid=kegid).one()
@@ -154,22 +158,26 @@ def delete_keg_function(kegid):
     session.commit()
     return True
 
-def get_username():
-
+def get_usernames():
     conn = sqlite3.connect('beer_coholic.db')
     cursor = conn.execute("select distinct username from users;")
     data = [row[0] for row in cursor]
     conn.close()
     return data
+    #session = db_session()
+    #user = session.query(User).username()
+    #print (user)
+    #session.commit()
+    #username = []
+    #return user
 
+def get_kegs():
+    conn = sqlite3.connect('beer_coholic.db')
+    cursor = conn.execute("select distinct kegid from keg;")
+    data = [row[0] for row in cursor]
+    conn.close()
+    return data
 
-    session = db_session()
-    user = session.query(User).username()
-    print (user)
-    session.commit()
-    username = []
-
-    return user
 
 #CRUD (CREATE, READ, UPDATE, DELETE):
 
@@ -178,22 +186,21 @@ def get_username():
 
 #Create user
 @app.route('/web_service/users', methods=['POST'])
-def create_user():
+def create_user_service():
     if not request.json or not 'userid' in request.json or not 'username' in request.json or not 'realname' in request.json or not 'email' in request.json:
         abort(400)
     session = db_session()
     try:
         user = User(userid=request.json['userid'], username=request.json['username'], realname=request.json['realname'], email=request.json['email'], amount=0)
         session.add(user)
-    except:
         session.commit()
+    except:
         abort(404)
-    session.commit()
     return jsonify(id=user.id,userid=user.userid,username=user.username,realname=user.realname,email=user.email)
 
 #Create keg
 @app.route('/web_service/kegs', methods=['POST'])
-def create_keg():
+def create_keg_service():
     if not request.json or not 'amount' in request.json or not 'kegid' in request.json:
         abort(400)
     session = db_session()
@@ -211,7 +218,7 @@ def create_keg():
 #Create user
 #Not working chech if username exists
 @app.route('/web_app/insert_user', methods=['GET', 'POST'])
-def user_register():
+def create_user_app():
     if request.method == 'GET':
         return render_template('insert_user.html')
     elif request.method == 'POST':
@@ -227,7 +234,7 @@ def user_register():
 #Create keg
 #Not working chech if kegid exists
 @app.route('/web_app/insert_keg', methods=['GET', 'POST'])
-def keg_register():
+def create_keg_app():
     if request.method == 'GET':
         return render_template('insert_keg.html')
     elif request.method == 'POST':
@@ -241,36 +248,40 @@ def keg_register():
 
 #Read all users
 @app.route('/web_service/users', methods=['GET'])
-def get_users():
+def read_users_service():
     session = db_session()
     users = session.query(User).all()
     all_users=[ user.__json__() for user in users]
+    session.commit()
     return jsonify({'users': all_users})
 
 #Read user
 @app.route('/web_service/users/<username>', methods=['GET'])
-def get_user(username):
+def read_user_service(username):
     session = db_session()
     try:
         user = session.query(User).filter_by(username=username).one()
+        session.commit()
     except:
         abort(404)
     return jsonify(id=user.id,userid=user.userid,username=user.username,realname=user.realname,email=user.email)
 
 #Read all kegs
 @app.route('/web_service/kegs', methods=['GET'])
-def get_kegs():
+def read_kegs_service():
     session = db_session()
     kegs = session.query(Keg).all()
     all_kegs=[ keg.__json__() for keg in kegs]
+    session.commit()
     return jsonify({'kegs': all_kegs})
 
 #Read keg
 @app.route('/web_service/kegs/<int:kegid>', methods=['GET'])
-def get_keg(kegid):
+def read_keg_service(kegid):
     session = db_session()
     try:
         keg = session.query(Keg).filter_by(kegid=kegid).one()
+        session.commit()
     except:
         abort(404)
     return jsonify(id=keg.id,amount=keg.amount,kegid=keg.kegid)
@@ -280,7 +291,7 @@ def get_keg(kegid):
 
 #Read all users
 @app.route('/web_app/show_users', methods=['GET', 'POST'])
-def hist_data_users():
+def read_users_app():
     historical_data = get_users_data()
     return render_template('show_users_table.html',historical_data=historical_data)
 
@@ -288,7 +299,7 @@ def hist_data_users():
 
 #Read all kegs
 @app.route('/web_app/show_kegs', methods=['GET', 'POST'])
-def hist_data_kegs():
+def read_kegs_app():
     historical_data = get_kegs_data()
     return render_template('show_kegs_table.html',historical_data=historical_data)
 
@@ -299,7 +310,7 @@ def hist_data_kegs():
 
 #Update user
 @app.route('/web_service/users/<username>', methods=['PUT'])
-def update_user(username):
+def update_user_service(username):
     session = db_session()
     try:
         if not request.json:
@@ -313,26 +324,23 @@ def update_user(username):
             user.email = request.json['email']
         if 'amount' in request.json:
             user.amount = request.json['amount']
-    except:
         session.commit()
+    except:
         abort(404)
-    session.commit()
     return jsonify(id=user.id,userid=user.userid,username=user.username,realname=user.realname,email=user.email)
 
 #Update keg
 @app.route('/web_service/kegs/<int:kegid>', methods=['PUT'])
-def update_keg(kegid):
+def update_keg_service(kegid):
     session = db_session()
     try:
         if not request.json:
             abort(400)
         keg = session.query(Keg).filter_by(kegid=kegid).one()
-        if 'amount' in request.json:
-            keg.amount = request.json['amount']
-    except:
+        keg.amount = request.json['amount']
         session.commit()
+    except:
         abort(404)
-    session.commit()
     return jsonify(id=keg.id,amount=keg.amount,kegid=keg.kegid)
 
 
@@ -340,32 +348,31 @@ def update_keg(kegid):
 
 #Update user
 @app.route('/web_app/update_user', methods=['GET', 'POST'])
-def user_update():
-    usernames = get_username()
+def update_user_app():
+    usernames = get_usernames()
     if request.method == 'GET':
-        print (usernames)
         return render_template('update_user.html', usernames=usernames)
     elif request.method == 'POST':
         username = request.form.get('user_name')
-        print (username)
         fullname = request.form.get('fullname')
         email = request.form.get('email')
         userid = request.form.get('userid')
         amount = request.form.get('amount')
-        if update_user_app(username,fullname,email,userid, amount):
+        if update_user(username,fullname,email,userid, amount):
             return render_template('user_update_succesfully.html', realname=fullname)
         else:
             return render_template('error.html')
 
 #Update keg
 @app.route('/web_app/update_keg', methods=['GET', 'POST'])
-def keg_update():
+def update_keg_app():
+    kegs = get_kegs()
     if request.method == 'GET':
-        return render_template('update_keg.html')
+        return render_template('update_keg.html', kegs=kegs)
     elif request.method == 'POST':
         kegid = request.form.get('kegid')
         amount = request.form.get('amount')
-        if update_keg_app(kegid, amount):
+        if update_keg(kegid, amount):
             return render_template('keg_update_succesfully.html', amount=amount)
         else:
             return render_template('error.html')
@@ -375,7 +382,7 @@ def keg_update():
 
 #Delete user
 @app.route('/web_service/users/<username>', methods=['DELETE'])
-def delete_user(username):
+def delete_user_service(username):
     session = db_session()
     try:
         user = session.query(User).filter_by(username=username).one()
@@ -387,7 +394,7 @@ def delete_user(username):
 
 #Delete keg
 @app.route('/web_service/kegs/<int:kegid>', methods=['DELETE'])
-def delete_keg(kegid):
+def delete_keg_service(kegid):
     session = db_session()
     try:
         keg = session.query(Keg).filter_by(kegid=kegid).one()
@@ -403,12 +410,12 @@ def delete_keg(kegid):
 #Delete user
 @app.route('/web_app/delete_user', methods=['GET', 'POST'])
 def delete_user_app():
-    session = db_session()
+    usernames = get_usernames()
     if request.method == 'GET':
-        return render_template('delete_user.html')
+        return render_template('delete_user.html', usernames=usernames)
     elif request.method == 'POST':
         username = request.form.get('username')
-        if delete_user_function(username):
+        if delete_user(username):
             return render_template('user_delete_succesfully.html')
         else:
             return render_template('error.html')
@@ -416,18 +423,15 @@ def delete_user_app():
 #Delete keg
 @app.route('/web_app/delete_keg', methods=['GET', 'POST'])
 def delete_keg_app():
-    session = db_session()
+    kegs = get_kegs()
     if request.method == 'GET':
-        return render_template('delete_keg.html')
+        return render_template('delete_keg.html', kegs=kegs)
     elif request.method == 'POST':
         keg = request.form.get('kegid')
-        if delete_keg_function(keg):
+        if delete_keg(keg):
             return render_template('keg_delete_succesfully.html')
         else:
             return render_template('error.html')
-
-
-
 
 
 #MAIN ROUTES
@@ -443,7 +447,6 @@ def hello():
 @app.route('/web_service')
 def hello2():
     return render_template('landing_page2.html')
-
 
 
 

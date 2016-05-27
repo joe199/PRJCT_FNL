@@ -2,8 +2,16 @@
  <title>Delete Keg</title>
 
     <h2>Deleting a keg...</h2>
-    <form action="/web_app/delete_keg" method="post">
-      <p>Keg Id From Keg To Delete: <input type="text" name="kegid" required></p>
+    <form action="/web_app/delete_keg" id="getform" method="post">
+
+      <p>Keg Id From Keg To Edit:
+      <select name="kegid" form="getform">
+      {% for keg in kegs%}
+      <option value="{{keg}}">{{keg}}</option>
+      {% endfor %}
+      </select>
+      </p>
+
       <input type="submit" value="Submit">
     </form>
 </html>

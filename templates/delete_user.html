@@ -2,8 +2,16 @@
  <title>Delete User</title>
 
     <h2>Deleting an user...</h2>
-    <form action="/web_app/delete_user" method="post">
-      <p>Username From User To Delete: <input type="text" name="username" required></p>
+    <form action="/web_app/delete_user" id="getform" method="post">
+
+      <p>Username From User To Delete:
+      <select name="username" form="getform">
+      {% for username1 in usernames%}
+      <option value="{{username1}}">{{username1}}</option>
+      {% endfor %}
+      </select>
+      </p>
+
       <input type="submit" value="Submit">
     </form>
 </html>
