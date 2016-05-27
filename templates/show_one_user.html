@@ -4,8 +4,8 @@
     <h2>User {{users_data[0][1]}}</h2>
     <form action="/web_app/update_user" id="updateform" method="post">
       <input type="hidden" name="user_name" value="{{users_data[0][1]}}">
-      <p>New Full Name: <input type="text" name="fullname" value="{{users_data[0][0]}}"></p>
-      <p>New User id: <input type="text" name="userid" value="{{users_data[0][2]}}"></p>
+      <p>New Full Name: <input type="text" name="fullname" value="{{users_data[0][2]}}"></p>
+      <p>New User id: <input type="text" name="userid" value="{{users_data[0][0]}}"></p>
       <p>New Email: <input type="text" name="email" value="{{users_data[0][3]}}"></p>
       <p>New Amount: <input type="text" name="amount" value="{{users_data[0][4]}}"></p>
       <input type="submit" value="Update" >
