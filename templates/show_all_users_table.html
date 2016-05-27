@@ -26,14 +26,17 @@ table#t01 th	{
 }
 </style>
   <body>
-    <h1 style="color:blue;">Kegs Data<hr></h1>
+    <h1 style="color:blue;">User Data<hr></h1>
 
-    <table id="t01">
+    <table border= "1" id="t01">
       <tr>
-  <th>Keg Id</th>
-	<th>Beer</th>
+  <th>User Id</th>
+	<th>Username</th>
+  <th>Fullname</th>
+  <th>Email</th>
+  <th>Beer</th>
       </tr>
-	{% for row in historical_data %}
+	{% for row in users_data %}
           <tr>
 	  {% for cell in row %}
 	    <td> {{cell}} </td>
@@ -42,7 +45,17 @@ table#t01 th	{
 	{% endfor %}
     </table>
 
-    <ul>
+    <form action="/web_app/show_user" id="t01" method="post">
+      <select name="usuari" form="t01">
+      {% for user in users%}
+      <option name="usuari" value="{{user}}">{{user}}</option>
+      {% endfor %}
+    </select>
+
+      <input type="submit" name="Select User">
+    </form>
+
+      <ul>
       <li><a href="/web_app">Main Page<br></a></li>
     </ul>
 

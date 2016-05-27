@@ -40,9 +40,21 @@ def get_users_data():
     user = session.query(User).all()
     list_of_lists=[]
     for row in user:
-        list_of_lists.append((row.userid,row.username,row.realname,row.email,row.amount))
+        list_of_lists.append((row.username, row.amount))
     session.commit()
     return list_of_lists
+
+def get_users_all_data(username):
+    session = db_session()
+    try:
+        userall = session.query(User).filter_by(username=username).one()
+        user = []
+        user.append((userall.userid, userall.username, userall.realname, userall.email, userall.amount))
+        session.commit()
+        return user
+    except:
+        session.commit()
+        return "FAIL"
 
 def get_kegs_data():
     session = db_session()
@@ -290,6 +302,22 @@ def read_users_app():
     return render_template('show_users_table.html',historical_data=historical_data)
 
 #Read user
+@app.route('/web_app/show_user', methods=['GET', 'POST'])
+def read_user_app():
+    users = get_usernames()
+    if request.method == 'GET':
+        users_data = []
+    elif request.method == 'POST':
+        user = request.form.get('usuari')
+        print ('-' *90)
+        print(user)
+        print ('-' *90)
+        user = "Costar93"
+        users_data = get_users_all_data(user)
+        print ('*' *90)
+        print(users_data)
+        print ('*' *90)
+    return render_template('show_all_users_table.html',users_data=users_data, users=users)
 
 #Read all kegs
 @app.route('/web_app/show_kegs', methods=['GET', 'POST'])
