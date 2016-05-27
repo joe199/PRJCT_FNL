@@ -6,7 +6,7 @@ Base = declarative_base()
 class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
-    username = Column(String)
+    username = Column(String, primary_key=True)
     userid = Column(Integer)
     realname = Column(String)
     email = Column(String)
@@ -29,7 +29,7 @@ class Keg(Base):
     __tablename__ = 'keg'
     id = Column(Integer, primary_key=True)
     amount = Column(Integer)
-    kegid = Column(Integer)
+    kegid = Column(Integer, primary_key=True)
 
     def __repr__(self):
         return "<User(amount='%s', kegid='%s')>" % (
