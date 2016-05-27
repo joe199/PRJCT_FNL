@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <title>Historical Users Data</title>
+  </head>
+  <style>
+table {
+    width:100%;
+}
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px;
+    text-align: centre;
+}
+table#t01 tr:nth-child(even) {
+    background-color: #ede778;
+}
+table#t01 tr:nth-child(odd) {
+   background-color:#fac09c;
+}
+table#t01 th	{
+    background-color: #41a8ba;
+    color: black;
+}
+</style>
+  <body>
+    <h1 style="color:blue;">Historical Users Data<hr></h1>
+
+    <table id="t01">
+      <tr>
+  <th>User Id</th>
+	<th>Username</th>
+	<th>Full Name</th>
+	<th>Email</th>
+  <th>Beer</th>
+      </tr>
+	{% for row in historical_data %}
+          <tr>
+	  {% for cell in row %}
+	    <td> {{cell}} </td>
+	  {% endfor %}
+	  </tr>
+	{% endfor %}
+    </table>
+
+    <ul>
+      <li><a href="/web_app">Main Page<br></a></li>
+    </ul>
+
+  </body>
+</html>
