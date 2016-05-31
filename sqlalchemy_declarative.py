@@ -23,6 +23,7 @@ class User(Base):
         userjs["username"] = self.username
         userjs["realname"] = self.realname
         userjs["email"] = self.email
+        userjs["amount"] = self.amount
         return userjs
 
 class Keg(Base):

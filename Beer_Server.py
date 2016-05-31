@@ -178,7 +178,7 @@ def create_user_service():
         session.commit()
     except:
         abort(404)
-    return jsonify(id=user.id,userid=user.userid,username=user.username,realname=user.realname,email=user.email)
+    return jsonify(id=user.id,userid=user.userid,username=user.username,realname=user.realname,email=user.email,amount=user.amount)
 
 #Create keg
 @app.route('/web_service/kegs', methods=['POST'])
@@ -244,7 +244,7 @@ def read_user_service(username):
         session.commit()
     except:
         abort(404)
-    return jsonify(id=user.id,userid=user.userid,username=user.username,realname=user.realname,email=user.email)
+    return jsonify(id=user.id,userid=user.userid,username=user.username,realname=user.realname,email=user.email,amount=user.amount)
 
 #Read all kegs
 @app.route('/web_service/kegs', methods=['GET'])
@@ -315,7 +315,7 @@ def update_user_service(username):
         session.commit()
     except:
         abort(404)
-    return jsonify(id=user.id,userid=user.userid,username=user.username,realname=user.realname,email=user.email)
+    return jsonify(id=user.id,userid=user.userid,username=user.username,realname=user.realname,email=user.email,amount=user.amount)
 
 #Update keg
 @app.route('/web_service/kegs/<int:kegid>', methods=['PUT'])
