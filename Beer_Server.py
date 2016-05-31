@@ -41,7 +41,6 @@ def get_users_data():
     list_of_lists=[]
     for row in user:
         list_of_lists.append((row.username, row.amount))
-    session.commit()
     return list_of_lists
 
 def get_users_all_data(username):
@@ -50,11 +49,9 @@ def get_users_all_data(username):
         userall = session.query(User).filter_by(username=username).one()
         user = []
         user.append((userall.userid, userall.username, userall.realname, userall.email, userall.amount))
-        session.commit()
         return user
     except:
-        session.commit()
-        return "FAIL"
+        return "ERROR"
 
 def get_kegs_all_data(kegid):
     session = db_session()
@@ -62,11 +59,9 @@ def get_kegs_all_data(kegid):
         kegall = session.query(Keg).filter_by(kegid=kegid).one()
         keg = []
         keg.append((kegall.kegid, kegall.amount))
-        session.commit()
         return keg
     except:
-        session.commit()
-        return "FAIL"
+        return "ERROR"
 
 def get_kegs_data():
     session = db_session()
@@ -74,17 +69,14 @@ def get_kegs_data():
     list_of_lists=[]
     for row in keg:
         list_of_lists.append((row.kegid,row.amount))
-    session.commit()
     return list_of_lists
 
 def user_exists(username):
     session = db_session()
     try:
         user = session.query(User).filter_by(username=username).one()
-        session.commit()
         return True
     except:
-        session.commit()
         return False
 
 def save_user(username,fullname,email,userid):
@@ -98,17 +90,14 @@ def save_user(username,fullname,email,userid):
             session.commit()
             return True
         except:
-            session.commit()
             return False
 
 def keg_exists(kegid):
     session = db_session()
     try:
         keg = session.query(Keg).filter_by(kegid=kegid).one()
-        session.commit()
         return True
     except:
-        session.commit()
         return False
 
 def save_keg(kegid):
@@ -122,7 +111,6 @@ def save_keg(kegid):
             session.commit()
             return True
         except:
-            session.commit()
             return False
 
 def update_user(username,fullname,email,userid,amount):
@@ -137,64 +125,40 @@ def update_user(username,fullname,email,userid,amount):
             user.email = email
         if amount != '':
             user.amount = amount
-    except:
         session.commit()
+        return True
+    except:
         return False
-    session.commit()
-    return True
 
 def update_keg(kegid,amount):
     session = db_session()
     try:
         keg = session.query(Keg).filter_by(kegid=kegid).one()
         keg.amount = amount
-    except:
         session.commit()
+        return True
+    except:
         return False
-    session.commit()
-    return True
 
 def delete_user(username):
     session = db_session()
     try:
         user = session.query(User).filter_by(username=username).one()
         session.delete(user)
-    except:
         session.commit()
+        return True
+    except:
         return False
-    session.commit()
-    return True
 
 def delete_keg(kegid):
     session = db_session()
     try:
         keg = session.query(Keg).filter_by(kegid=kegid).one()
         session.delete(keg)
-    except:
         session.commit()
+        return True
+    except:
         return False
-    session.commit()
-    return True
-
-def get_usernames():
-    conn = sqlite3.connect('beer_coholic.db')
-    cursor = conn.execute("select distinct username from users;")
-    data = [row[0] for row in cursor]
-    conn.close()
-    return data
-    #session = db_session()
-    #user = session.query(User).username()
-    #print (user)
-    #session.commit()
-    #username = []
-    #return user
-
-def get_kegs():
-    conn = sqlite3.connect('beer_coholic.db')
-    cursor = conn.execute("select distinct kegid from keg;")
-    data = [row[0] for row in cursor]
-    conn.close()
-    return data
 
 
 #CRUD (CREATE, READ, UPDATE, DELETE):
