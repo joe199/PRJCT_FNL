@@ -171,6 +171,8 @@ def delete_keg(kegid):
 def create_user_service():
     if not request.json or not 'userid' in request.json or not 'username' in request.json or not 'realname' in request.json or not 'email' in request.json:
         abort(400)
+    if user_exists(request.json['username']):
+        abort(400)
     session = db_session()
     try:
         user = User(userid=request.json['userid'], username=request.json['username'], realname=request.json['realname'], email=request.json['email'], amount=0)
@@ -184,6 +186,8 @@ def create_user_service():
 @app.route('/web_service/kegs', methods=['POST'])
 def create_keg_service():
     if not request.json or not 'amount' in request.json or not 'kegid' in request.json:
+        abort(400)
+    if keg_exists(request.json['kegid']):
         abort(400)
     session = db_session()
     try:
