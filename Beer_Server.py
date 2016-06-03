@@ -81,16 +81,16 @@ def user_exists(username):
 
 def save_user(username,fullname,email,userid):
     if user_exists(username):
-        return False
+        return (False, "exists")
     else:
         try:
             session = db_session()
             new_user = User(username=username, realname=fullname, email=email, userid=userid, amount=0)
             session.add(new_user)
             session.commit()
-            return True
+            return (True, "No error")
         except:
-            return False
+            return (False, "Error saving")
 
 def keg_exists(kegid):
     session = db_session()
@@ -102,16 +102,16 @@ def keg_exists(kegid):
 
 def save_keg(kegid):
     if keg_exists(kegid):
-        return False
+        return (False, "exists")
     else:
         try:
             session = db_session()
             new_keg = Keg(kegid=kegid, amount=0)
             session.add(new_keg)
             session.commit()
-            return True
+            return (True, "No error")
         except:
-            return False
+            return (False, "Error saving")
 
 def update_user(username,fullname,email,userid,amount):
     session = db_session()
@@ -211,8 +211,11 @@ def create_user_app():
         fullname = request.form.get('fullname')
         email = request.form.get('email')
         userid = request.form.get('userid')
-        if save_user(username,fullname,email,userid):
+        state, error = save_user(username,fullname,email,userid)
+        if state:
             return render_template('user_register_succesfully.html',username=username,realname=fullname)
+        elif error == "exists":
+            return render_template('already_exists.html',username=username, user="username")
         else:
             return render_template('error.html')
 
@@ -223,8 +226,11 @@ def create_keg_app():
         return render_template('insert_keg.html')
     elif request.method == 'POST':
         kegid = request.form.get('kegid')
-        if save_keg(kegid):
+        state, error = save_keg(kegid)
+        if state:
             return render_template('keg_register_succesfully.html',kegid=kegid)
+        elif error == "exists":
+            return render_template('already_exists.html',username=kegid, user="Keg Id")
         else:
             return render_template('error.html')
 
