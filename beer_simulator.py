@@ -91,7 +91,6 @@ class FlowControl(object):
                 print "user", self.user, " drank ", self.service
                 self.server.update_score("1", self.user, self.service)
                 self.client.enviar(self.user, self.service, self.sortidor)
-                time.sleep(3)
             # Guardar a usuari self.service
             self.service = 0
             self.user = self._get_user()
